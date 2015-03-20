@@ -30,6 +30,8 @@
 * [#958](https://github.com/clojure-emacs/cider/pull/958) Reuse existing repl
   buffers with dead processes. Users are now informed about existing zombie repl
   buffers and are offered the choice to reuse those for new connections.
+* [#1032](https://github.com/clojure-emacs/cider/issues/1032) New function jump-to-resource-or-var 
+  combines the functionality of jump-to-var and jump-to-resource.
 
 ### Changes
 

@@ -762,10 +762,34 @@ window."
       (when pos
         (goto-char pos)))))
 
+(defun cider-jump-to-resource-or-var (symbol-file)
+  "Try to jump to the variable at point.
+   If variable is not found, try to jump to resource of the same name.
+When called interactively, A prompt is given with a default value of
+thing at point. If a prefix is given then the result is opened in 'other-window'. "
+  (interactive
+   (list (read-string "Jump to: " (thing-at-point 'filename)
+                      nil (thing-at-point 'filename))))
+  (-if-let (info (if (not (string-match "\\(\\.\\)" symbol-file))
+                     (cider-var-info symbol-file)
+                   nil))
+      (cider--jump-to-loc-from-info info current-prefix-arg)
+    (progn
+      (cider-ensure-op-supported "resource")
+      (-if-let* ((resource (cider-sync-request:resource symbol-file))
+                 (buffer (cider-find-file resource)))
+          (cider-jump-to buffer 0 current-prefix-arg)
+        (message "Resource or variable %s not resolved" symbol-file)))))
+
+(defun cider-jump-to-resource-or-var-other-window ()
+  "jump to var or resource at point, place results in other window."
+  (interactive)
+  (let ((current-prefix-arg '(4)))
+    (call-interactively 'cider-jump-to-resource-or-var)))
+
 (defun cider-jump-to-resource (path)
   "Jump to the resource at the resource-relative PATH.
 When called interactively, this operates on point."
-  (interactive (list (thing-at-point 'filename)))
   (cider-ensure-op-supported "resource")
   (-if-let* ((resource (cider-sync-request:resource path))
              (buffer (cider-find-file resource)))
@@ -793,14 +817,10 @@ OTHER-WINDOW is passed to `cider-jamp-to'."
         (cider--jump-to-loc-from-info info))
     (message "Symbol %s not resolved" var)))
 
-(defun cider-jump-to-var (&optional var line)
-  "Jump to the definition of VAR, optionally at a specific LINE.
-When called interactively, prompts with symbol at point."
-  (interactive)
+(defun cider-jump-to-var (var line)
+  "Jump to the definition of VAR, optionally at a specific LINE."
   (cider-ensure-op-supported "info")
-  (if var
-      (cider--jump-to-var var line)
-    (cider-read-symbol-name "Symbol: " #'cider--jump-to-var)))
+  (cider--jump-to-var var line))
 
 (define-obsolete-function-alias 'cider-jump 'cider-jump-to-var "0.7.0")
 (defalias 'cider-jump-back 'pop-tag-mark)

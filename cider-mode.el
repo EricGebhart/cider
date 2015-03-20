@@ -54,9 +54,9 @@ entirely."
 (defvar cider-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-c C-d") #'cider-doc-map)
-    (define-key map (kbd "M-.") #'cider-jump-to-var)
+    (define-key map (kbd "M-.") #'cider-jump-to-resource-or-var)
     (define-key map (kbd "M-,") #'cider-jump-back)
-    (define-key map (kbd "C-c M-.") #'cider-jump-to-resource)
+    (define-key map (kbd "C-c M-.") #'cider-jump-to-resource-or-var)
     (define-key map (kbd "M-TAB") #'complete-symbol)
     (define-key map (kbd "C-M-x")   #'cider-eval-defun-at-point)
     (define-key map (kbd "C-c C-c") #'cider-eval-defun-at-point)
@@ -113,8 +113,8 @@ entirely."
         ["Macroexpand-1" cider-macroexpand-1]
         ["Macroexpand-all" cider-macroexpand-all]
         "--"
-        ["Jump to source" cider-jump-to-var]
-        ["Jump to resource" cider-jump-to-resource]
+        ["Jump to source" cider-jump-to-resource-or-var]
+        ["Jump to resource" cider-jump-to-resource-or-var]
         ["Jump back" cider-jump-back]
         "--"
         ["Run test" cider-test-run-test]

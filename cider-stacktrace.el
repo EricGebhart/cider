@@ -435,7 +435,7 @@ it wraps to 0."
   (let ((button (button-at (point))))
     (if (and button (button-get button 'line))
         (cider-stacktrace-navigate button)
-      (call-interactively 'cider-jump-to-var))))
+      (call-interactively 'cider-jump-to-resource-or-var))))
 
 
 ;; Rendering

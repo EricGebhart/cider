@@ -169,7 +169,7 @@
         (line (get-text-property (point) 'line)))
     (if (and ns var)
         (cider-jump-to-var (concat ns "/" var) line)
-      (call-interactively 'cider-jump-to-var))))
+      (call-interactively 'cider-jump-to-resource-or-var))))
 
 
 ;;; Error stacktraces
